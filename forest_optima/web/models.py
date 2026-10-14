@@ -50,6 +50,7 @@ class WorkspaceData(BaseModel):
 class WorkspaceSaveRequest(BaseModel):
     name: str = Field(default="Сценарий моделирования", max_length=255)
     data: dict[str, Any] = Field(..., description="Полный слепок состояния калькулятора")
+    owner_id: str = Field(default="", description="Идентификатор пользователя-владельца")
 
 
 class WorkspaceSummary(BaseModel):
@@ -63,6 +64,7 @@ class WorkspaceResponse(BaseModel):
     uid: str
     name: str
     data: dict[str, Any]
+    owner_id: str = ""
     created_at: str
     updated_at: str
 

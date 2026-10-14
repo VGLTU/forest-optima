@@ -1260,8 +1260,24 @@
     // ==========================================
     let isWorkspaceReady = false;
     let autoSaveTimeout = null;
+    let currentUserId = getOrCreateUserId();
     let currentWsId = getInitialWorkspaceId();
     let currentWsName = "Основной расчет (Монография ВГЛТУ)";
+
+    function getOrCreateUserId() {
+        let uid = null;
+        try {
+            uid = localStorage.getItem('forest_optima_user_id');
+        } catch (e) {}
+
+        if (!uid || !uid.trim()) {
+            uid = 'usr_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(4);
+            try {
+                localStorage.setItem('forest_optima_user_id', uid);
+            } catch (e) {}
+        }
+        return uid;
+    }
 
     function getInitialWorkspaceId() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -1269,7 +1285,11 @@
         if (idFromUrl && idFromUrl.trim()) {
             return idFromUrl.trim();
         }
-        let idFromStorage = localStorage.getItem('forest_optima_active_ws');
+        let idFromStorage = null;
+        try {
+            idFromStorage = localStorage.getItem('forest_optima_active_ws');
+        } catch (e) {}
+
         if (idFromStorage && idFromStorage.trim()) {
             return idFromStorage.trim();
         }
@@ -1329,11 +1349,12 @@
             enterprises: enterprises
         };
 
-        // Сохраняем в localStorage для надежности
+        // Сохраняем в localStorage для надежности с привязкой к владельцу
         try {
             localStorage.setItem(`forest_ws_${currentWsId}`, JSON.stringify({
                 uid: currentWsId,
                 name: currentWsName,
+                owner_id: currentUserId,
                 data: payloadData,
                 updated_at: new Date().toISOString()
             }));
@@ -1346,10 +1367,14 @@
         try {
             const resp = await fetch(`/api/workspace/${encodeURIComponent(currentWsId)}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-User-Id': currentUserId
+                },
                 body: JSON.stringify({
                     name: currentWsName,
-                    data: payloadData
+                    data: payloadData,
+                    owner_id: currentUserId
                 })
             });
             if (resp.ok) {
@@ -1379,7 +1404,9 @@
 
         let loaded = false;
         try {
-            const resp = await fetch(`/api/workspace/${encodeURIComponent(currentWsId)}`);
+            const resp = await fetch(`/api/workspace/${encodeURIComponent(currentWsId)}`, {
+                headers: { 'X-User-Id': currentUserId }
+            });
             if (resp.ok) {
                 const ws = await resp.json();
                 applyWorkspaceState(ws);
@@ -1531,7 +1558,9 @@
 
         let items = [];
         try {
-            const resp = await fetch('/api/workspaces');
+            const resp = await fetch(`/api/workspaces?owner_id=${encodeURIComponent(currentUserId)}`, {
+                headers: { 'X-User-Id': currentUserId }
+            });
             if (resp.ok) {
                 items = await resp.json();
             }
@@ -1544,19 +1573,21 @@
                 const key = localStorage.key(i);
                 if (key && key.startsWith('forest_ws_')) {
                     const localData = JSON.parse(localStorage.getItem(key));
-                    if (localData && !items.some(x => x.uid === localData.uid)) {
-                        items.push({
-                            uid: localData.uid,
-                            name: localData.name || localData.uid,
-                            updated_at: localData.updated_at || new Date().toISOString()
-                        });
+                    if (localData && (!localData.owner_id || localData.owner_id === currentUserId)) {
+                        if (!items.some(x => x.uid === localData.uid)) {
+                            items.push({
+                                uid: localData.uid,
+                                name: localData.name || localData.uid,
+                                updated_at: localData.updated_at || new Date().toISOString()
+                            });
+                        }
                     }
                 }
             }
         } catch (e) {}
 
         if (items.length === 0) {
-            listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#64748B;">Нет сохраненных сценариев</div>';
+            listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#64748B;">У вас пока нет других сохраненных сценариев</div>';
             return;
         }
 
@@ -1607,7 +1638,10 @@
         if (!confirm(`Удалить сценарий ${uid}?`)) return;
 
         try {
-            await fetch(`/api/workspace/${encodeURIComponent(uid)}`, { method: 'DELETE' });
+            await fetch(`/api/workspace/${encodeURIComponent(uid)}`, { 
+                method: 'DELETE',
+                headers: { 'X-User-Id': currentUserId }
+            });
         } catch (err) {}
         try {
             localStorage.removeItem(`forest_ws_${uid}`);

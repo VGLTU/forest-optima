@@ -69,11 +69,24 @@ def test_workspace_lifecycle(client):
     assert resp_get2.status_code == 200
     assert resp_get2.json()["name"] == "Тестовый сценарий тайги"
 
-    # 4. Проверка списка пространств
-    resp_list = client.get("/api/workspaces")
-    assert resp_list.status_code == 200
-    items = resp_list.json()
-    assert any(item["uid"] == uid for item in items)
+    # 4. Проверка изоляции пользователей
+    # Пользователь user1 должен видеть свой сценарий
+    resp_user1 = client.get("/api/workspaces", headers={"X-User-Id": "user1"})
+    # Пока сценарий был сохранен без owner_id, но с owner_id:
+    client.post(f"/api/workspace/{uid}", json=new_data, headers={"X-User-Id": "user1"})
+    resp_user1 = client.get("/api/workspaces", headers={"X-User-Id": "user1"})
+    assert resp_user1.status_code == 200
+    assert any(item["uid"] == uid for item in resp_user1.json())
+
+    # Другой пользователь (или аноним в инкогнито) НЕ должен видеть чужие сценарии
+    resp_incognito = client.get("/api/workspaces", headers={"X-User-Id": "user_incognito_anonymous"})
+    assert resp_incognito.status_code == 200
+    assert not any(item["uid"] == uid for item in resp_incognito.json())
+
+    # Анонимный запрос без заголовка также возвращает пустой список
+    resp_anon = client.get("/api/workspaces")
+    assert resp_anon.status_code == 200
+    assert resp_anon.json() == []
 
 
 def test_calculate_endpoint(client):

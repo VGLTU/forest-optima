@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Header, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
 
@@ -93,14 +93,25 @@ async def health_check():
 
 
 @app.get("/api/workspaces", response_model=list[WorkspaceSummary])
-async def get_all_workspaces(limit: int = 50):
-    """Список последних сохраненных рабочих пространств."""
-    rows = list_workspaces(DB_PATH, limit=limit)
+async def get_all_workspaces(
+    owner_id: str | None = Query(default=None),
+    x_user_id: str | None = Header(default=None, alias="X-User-Id"),
+    limit: int = 50,
+):
+    """
+    Список рабочих пространств, принадлежащих только текущему пользователю.
+    Изолирует сценарии разных пользователей и защищает от утечки чужих данных в инкогнито.
+    """
+    effective_owner = (owner_id or x_user_id or "").strip()
+    rows = list_workspaces(DB_PATH, owner_id=effective_owner, limit=limit)
     return [WorkspaceSummary(**r) for r in rows]
 
 
 @app.get("/api/workspace/{uid}", response_model=WorkspaceResponse)
-async def get_single_workspace(uid: str):
+async def get_single_workspace(
+    uid: str,
+    x_user_id: str | None = Header(default=None, alias="X-User-Id"),
+):
     """
     Получение сохраненного состояния по ID рабочего пространства.
     Если запись не существует, возвращается шаблонное состояние по умолчанию.
@@ -113,18 +124,24 @@ async def get_single_workspace(uid: str):
     if record:
         return WorkspaceResponse(**record)
 
+    effective_owner = (x_user_id or "").strip()
     # Авто-инициализация нового рабочего пространства дефолтными данными
     new_record = upsert_workspace(
         db_path=DB_PATH,
         uid=cleaned_uid,
         name=f"Расчет #{cleaned_uid[:8]}",
         data=DEFAULT_WORKSPACE_DATA,
+        owner_id=effective_owner,
     )
     return WorkspaceResponse(**new_record)
 
 
 @app.post("/api/workspace/{uid}", response_model=WorkspaceResponse)
-async def save_single_workspace(uid: str, payload: WorkspaceSaveRequest):
+async def save_single_workspace(
+    uid: str,
+    payload: WorkspaceSaveRequest,
+    x_user_id: str | None = Header(default=None, alias="X-User-Id"),
+):
     """
     Сохранение / автосинхронизация состояния рабочего пространства пользователя.
     """
@@ -133,20 +150,26 @@ async def save_single_workspace(uid: str, payload: WorkspaceSaveRequest):
         raise HTTPException(status_code=400, detail="Идентификатор не может быть пустым.")
 
     name = payload.name.strip() if payload.name else f"Расчет #{cleaned_uid[:8]}"
+    effective_owner = (payload.owner_id or x_user_id or "").strip()
     record = upsert_workspace(
         db_path=DB_PATH,
         uid=cleaned_uid,
         name=name,
         data=payload.data,
+        owner_id=effective_owner,
     )
     return WorkspaceResponse(**record)
 
 
 @app.delete("/api/workspace/{uid}")
-async def remove_workspace(uid: str):
+async def remove_workspace(
+    uid: str,
+    x_user_id: str | None = Header(default=None, alias="X-User-Id"),
+):
     """Удаление рабочего пространства."""
     cleaned_uid = uid.strip()
-    success = delete_workspace(DB_PATH, cleaned_uid)
+    effective_owner = (x_user_id or "").strip()
+    success = delete_workspace(DB_PATH, cleaned_uid, owner_id=effective_owner)
     if not success:
         raise HTTPException(status_code=404, detail="Рабочее пространство не найдено.")
     return {"status": "deleted", "uid": cleaned_uid}
