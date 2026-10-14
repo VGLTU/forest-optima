@@ -606,6 +606,39 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Responsive Mobile Breakpoints */
+        @media (max-width: 768px) {
+            header {
+                padding: 14px 16px;
+            }
+            .header-title h1 {
+                font-size: 18px;
+            }
+            .container {
+                padding: 0 12px;
+                margin: 16px auto;
+            }
+            .card {
+                padding: 14px;
+            }
+            .ws-input {
+                min-width: 100%;
+            }
+            .nav-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .nav-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-tab-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+        }
     </style>
 </head>
 <body>
