@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forest-optima"
+version = "1.0.0"
+description = "Информационно-аналитический комплекс многокритериальной оценки и сценарного моделирования лесного фонда"
+readme = "README.md"
+authors = [
+    { name = "Иван Лесных", email = "ivan@example.com" },
+    { name = "И.С. Зиновьева" },
+    { name = "А.М. Бурмистров" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "openpyxl>=3.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "httpx>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]

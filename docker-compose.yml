@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  forest-optima:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: forest-optima-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8890:8890"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - FOREST_OPTIMA_DATA_DIR=/app/data
+      - PORT=8890
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8890/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

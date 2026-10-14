@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информационно-аналитический комплекс «Лес-Оптима» | ВГЛТУ</title>
+    <style>
+        :root {
+            --primary: #1E3A5F;
+            --primary-hover: #162B47;
+            --forest: #2E7D32;
+            --forest-light: #E8F5E9;
+            --border: #DDE2E5;
+            --bg: #F8FAFB;
+            --card-bg: #FFFFFF;
+            --text: #212529;
+            --text-muted: #6C757D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 32px;
+            border-bottom: 3px solid #162B47;
+        }
+
+        .header-content {
+            max-width: 1350px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header-title h1 {
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: #CFD8DC;
+            margin-top: 3px;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .h-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1350px;
+            margin: 24px auto;
+            padding: 0 20px;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .nav-tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.15s;
+        }
+
+        .nav-tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .nav-tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Controls Card */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .weights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .weight-item {
+            background: #F8F9FA;
+            padding: 14px 16px;
+            border-radius: 6px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .weight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13.5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .weight-val {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 5px;
+            background: #CED4DA;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Summary Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+        }
+
+        .stat-box-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-box-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: white;
+            border-color: #CED4DA;
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: #E9ECEF;
+        }
+
+        .btn-forest {
+            background: var(--forest);
+            color: white;
+        }
+
+        .btn-forest:hover {
+            background: #1B5E20;
+        }
+
+        .btn-danger-sm {
+            background: #FFF5F5;
+            color: #C53030;
+            border: 1px solid #FEB2B2;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-danger-sm:hover {
+            background: #C53030;
+            color: white;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        thead {
+            background: #F1F4F7;
+            color: var(--primary);
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        th {
+            padding: 10px 14px;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #EDF2F4;
+            vertical-align: middle;
+        }
+
+        tr:nth-child(even) {
+            background-color: #FAFCFD;
+        }
+
+        tr:hover {
+            background-color: #F0F5FA;
+        }
+
+        .table-input {
+            width: 100%;
+            min-width: 90px;
+            padding: 5px 8px;
+            border: 1px solid #D0D7DE;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+            background: white;
+            transition: border-color 0.15s;
+        }
+
+        .table-input:focus {
+            border-color: var(--primary);
+            background: #FFF;
+            box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.1);
+        }
+
+        .table-input-name {
+            min-width: 160px;
+            font-weight: 600;
+        }
+
+        .badge-rank {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .rank-top {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #C8E6C9;
+        }
+
+        .rank-mid {
+            background: #FFF8E1;
+            color: #F57F17;
+            border: 1px solid #FFE082;
+        }
+
+        .rank-low {
+            background: #F5F5F5;
+            color: #757575;
+            border: 1px solid #E0E0E0;
+        }
+
+        .score-cell {
+            font-weight: 700;
+            color: var(--forest);
+        }
+
+        .category-badge {
+            font-size: 11.5px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .cat-priority {
+            background: #E8F5E9;
+            color: #1B5E20;
+        }
+
+        .cat-standard {
+            background: #E3F2FD;
+            color: #0D47A1;
+        }
+
+        .cat-reserve {
+            background: #F5F5F5;
+            color: #616161;
+        }
+
+        /* Workspace Toolbar */
+        .workspace-bar {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .ws-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ws-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ws-input {
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 260px;
+            background: #FAFAFA;
+            transition: all 0.2s;
+        }
+
+        .ws-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #FFFFFF;
+        }
+
+        .ws-badge {
+            background: #EEF2F6;
+            color: #475569;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E1;
+        }
+
+        .ws-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ws-status-synced {
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .ws-status-saving {
+            background: #FFFBEB;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        .ws-status-offline {
+            background: #F1F5F9;
+            color: #64748B;
+            border: 1px solid #CBD5E1;
+        }
+
+        .ws-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-ws {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .btn-ws:hover {
+            background: #F8FAFC;
+            border-color: #94A3B8;
+        }
+
+        .btn-ws-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-ws-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-ws-green {
+            background: #059669;
+            color: white;
+            border-color: #059669;
+        }
+
+        .btn-ws-green:hover {
+            background: #047857;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 24px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-size: 17px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .ws-list-item {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F8FAFC;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .ws-list-item:hover {
+            background: #EEF2F6;
+            border-color: var(--primary);
+        }
+
+        .ws-list-item.active {
+            border-color: var(--primary);
+            background: #EFF6FF;
+        }
+
+        /* Toast */
+        #ws-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1E293B;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+            display: none;
+            z-index: 10000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="header-title">
+            <h1>Программный комплекс «Лес-Оптима» v1.0</h1>
+            <p>Система поддержки принятия решений: многокритериальная оценка и ранжирование лесного фонда (ВГЛТУ)</p>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Workspace Persistence Toolbar -->
+    <div class="workspace-bar">
+        <div class="ws-left">
+            <span class="ws-label">Сценарий:</span>
+            <input type="text" id="ws-name-input" class="ws-input" value="Основной расчет (Монография ВГЛТУ)" placeholder="Название сценария" onchange="onWorkspaceNameChange(this.value)">
+            <span class="ws-badge" id="ws-id-badge" title="Уникальный идентификатор сценария">ID: ...</span>
+            <span class="ws-status-pill ws-status-synced" id="ws-sync-status">
+                <span id="ws-status-dot">●</span> <span id="ws-status-text">Синхронизировано</span>
+            </span>
+        </div>
+        <div class="ws-actions">
+            <button class="btn-ws" onclick="copyWorkspaceShareLink()" title="Скопировать постоянную ссылку для совместной работы">
+                🔗 Поделиться ссылкой
+            </button>
+            <button class="btn-ws" onclick="createNewWorkspace()" title="Создать новое изолированное рабочее пространство">
+                ➕ Новый расчет
+            </button>
+            <button class="btn-ws" onclick="openWorkspacesModal()" title="Список всех сохраненных сценариев">
+                📂 Мои сценарии
+            </button>
+            <button class="btn-ws btn-ws-green" onclick="downloadServerExcelReport()" title="Скачать официальный научно-производственный отчет в формате Microsoft Excel (.xlsx)">
+                📥 Официальный .xlsx
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="nav-tabs">
+        <button class="nav-tab-btn active" onclick="switchTab('tab-districts')">Ранжирование лесничеств</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-enterprises')">Оценка предприятий-арендаторов</button>
+    </div>
+
+    <!-- TAB 1: DISTRICTS -->
+    <div id="tab-districts" class="tab-content active">
+        <!-- Controls Card -->
+        <div class="card">
+            <div class="card-header-flex">
+                <div class="card-title">Параметры многокритериальной модели (весовые коэффициенты)</div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-outline" onclick="resetToGost()">Сбросить веса (50% / 30% / 20%)</button>
+                    <button class="btn btn-forest" onclick="exportDataExcel()">Экспорт таблицы в Excel</button>
+                </div>
+            </div>
+
+            <div class="weights-grid">
+                <div class="weight-item">
+                    <div class="weight-header">
+                        <span>Запас древесины (w₁)</span>
+                        <span id="txt-w-stock" class="weight-val">50%</span>
+                    </div>
+                    <input type="range" id="sl-stock" min="5" max="80" step="5" value="50" oninput="changeWeight('stock')">
+                </div>
+
+                <div class="weight-item">
+                    <div class="weight-header">
+                        <span>Дорожная инфраструктура (w₂)</span>
+                        <span id="txt-w-roads" class="weight-val">30%</span>
+                    </div>
+                    <input type="range" id="sl-roads" min="5" max="80" step="5" value="30" oninput="changeWeight('roads')">
+                </div>
+
+                <div class="weight-item">
+                    <div class="weight-header">
+                        <span>Разрешенная площадь (w₃)</span>
+                        <span id="txt-w-area" class="weight-val">20%</span>
+                    </div>
+                    <input type="range" id="sl-area" min="5" max="80" step="5" value="20" oninput="changeWeight('area')">
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-box-title">Всего объектов в базе</div>
+                <div id="cnt-objects" class="stat-box-val">23</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">Лидер ранжирования</div>
+                <div id="txt-leader" class="stat-box-val" style="color: var(--forest);">Теллермановское</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">Максимальный запас в базе</div>
+                <div id="max-stock-val" class="stat-box-val">6 546.2 тыс. м³</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">Сумма весов (норма)</div>
+                <div id="txt-sum-w" class="stat-box-val">100%</div>
+            </div>
+        </div>
+
+        <!-- Main Editable Table Card -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
+                <div class="card-title">Реестр лесничеств (данные можно редактировать прямо в ячейках)</div>
+                <button class="btn btn-primary" onclick="addNewDistrict()">+ Добавить лесничество</button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">Ранг</th>
+                            <th>Наименование лесничества / участка</th>
+                            <th style="width: 170px;">Запас древесины (тыс. м³)</th>
+                            <th style="width: 170px;">Разрешенная площадь (га)</th>
+                            <th style="width: 170px;">Лесные дороги (км)</th>
+                            <th style="width: 160px;">Интегральный индекс</th>
+                            <th style="width: 180px;">Приоритет освоения</th>
+                            <th style="width: 80px; text-align: center;">Удалить</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl-body">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: ENTERPRISES -->
+    <div id="tab-enterprises" class="tab-content">
+        <!-- Summary Statistics for Enterprises -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-box-title">Всего предприятий в базе</div>
+                <div id="cnt-enterprises" class="stat-box-val">7</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">Лидер устойчивости</div>
+                <div id="txt-ent-leader" class="stat-box-val" style="color: var(--forest); font-size: 16px;">ООО «Шипов лес» (15/15)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">В зоне абсолютной гармонии</div>
+                <div id="cnt-harmony" class="stat-box-val" style="color: #2E7D32;">2 предприятия</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-title">Средний уровень развития</div>
+                <div id="cnt-medium" class="stat-box-val" style="color: #0288D1;">4 предприятия</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
+                <div class="card-title">Классификация предприятий-арендаторов (матрица Эйлера-Венна)</div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-outline" onclick="resetEnterprisesToMonograph()">Сбросить к данным монографии</button>
+                    <button class="btn btn-primary" onclick="addNewEnterprise()">+ Добавить предприятие</button>
+                    <button class="btn btn-forest" onclick="exportEnterprisesExcel()">Экспорт таблицы в Excel</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Наименование предприятия</th>
+                            <th style="width: 140px;">Экономика (0-5)</th>
+                            <th style="width: 140px;">Экология (0-5)</th>
+                            <th style="width: 140px;">Социум (0-5)</th>
+                            <th style="width: 150px;">Интегральный балл</th>
+                            <th>Качественный уровень</th>
+                            <th>Сектор матрицы Эйлера-Венна</th>
+                            <th style="width: 60px; text-align: center;">Удал.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl-body-ent">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Euler-Venn Visual Diagram Card -->
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header-flex">
+                <div>
+                    <div class="card-title">Графическое позиционирование в матрице Эйлера-Венна</div>
+                    <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                        Интерактивная карта распределения предприятий по секторам устойчивого развития (пересчитывается на лету)
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: center; margin-top: 16px;">
+                <!-- SVG Diagram -->
+                <div style="text-align: center; background: #FAFBFD; border-radius: 8px; padding: 20px; border: 1px solid var(--border);">
+                    <svg viewBox="0 0 500 420" style="max-width: 420px; width: 100%; height: auto;">
+                        <!-- Circle 1: Economy -->
+                        <circle cx="190" cy="180" r="125" fill="#1E3A8A" fill-opacity="0.12" stroke="#1E3A8A" stroke-width="2.5"/>
+                        <!-- Circle 2: Ecology -->
+                        <circle cx="310" cy="180" r="125" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="2.5"/>
+                        <!-- Circle 3: Society -->
+                        <circle cx="250" cy="270" r="125" fill="#D97706" fill-opacity="0.12" stroke="#D97706" stroke-width="2.5"/>
+
+                        <!-- Center Harmony Highlight -->
+                        <polygon points="250,195 225,235 275,235" fill="#10B981" fill-opacity="0.35" stroke="#047857" stroke-width="2"/>
+
+                        <!-- Labels -->
+                        <text x="110" y="90" font-family="system-ui" font-size="13" font-weight="700" fill="#1E3A8A">ЭКОНОМИКА</text>
+                        <text x="390" y="90" font-family="system-ui" font-size="13" font-weight="700" fill="#059669" text-anchor="end">ЭКОЛОГИЯ</text>
+                        <text x="250" y="385" font-family="system-ui" font-size="13" font-weight="700" fill="#D97706" text-anchor="middle">СОЦИУМ</text>
+
+                        <!-- Overlap titles -->
+                        <text x="250" y="145" font-family="system-ui" font-size="11" font-weight="600" fill="#0F766E" text-anchor="middle">Би-зона (Э-Э)</text>
+                        <text x="250" y="218" font-family="system-ui" font-size="11" font-weight="800" fill="#064E3B" text-anchor="middle">ГАРМОНИЯ</text>
+                    </svg>
+                </div>
+
+                <!-- Live Dynamic Sector Lists -->
+                <div id="venn-sectors-breakdown" style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Исходная база данных лесничеств
+    let districts = [
+        { id: 1, name: "Теллермановское", stock: 6546.2, area: 40549.7, roads: 415.7 },
+        { id: 2, name: "Воронежское", stock: 5124.1, area: 27165.0, roads: 142.8 },
+        { id: 3, name: "Бутурлиновское", stock: 4965.4, area: 24146.0, roads: 40.1 },
+        { id: 4, name: "Острогожское", stock: 4673.6, area: 26463.0, roads: 24.5 },
+        { id: 5, name: "Бобровское", stock: 3946.9, area: 26113.0, roads: 62.2 },
+        { id: 6, name: "Воронцовское", stock: 3805.2, area: 15913.0, roads: 15.9 },
+        { id: 7, name: "Калачеевское", stock: 3276.8, area: 27213.6, roads: 70.1 },
+        { id: 8, name: "Аннинское", stock: 3253.6, area: 20235.0, roads: 65.6 },
+        { id: 9, name: "Савальское", stock: 2543.4, area: 18499.0, roads: 14.7 },
+        { id: 10, name: "Павловское", stock: 2417.4, area: 74675.0, roads: 113.5 },
+        { id: 11, name: "Давыдовское", stock: 1850.0, area: 31776.0, roads: 35.2 },
+        { id: 12, name: "Новоусманское", stock: 1620.0, area: 22799.0, roads: 8.4 },
+        { id: 13, name: "Семилукское", stock: 1450.0, area: 18302.0, roads: 81.4 },
+        { id: 14, name: "Новохоперское", stock: 1380.0, area: 17041.0, roads: 2.5 },
+        { id: 15, name: "Песковское", stock: 1290.0, area: 16419.0, roads: 24.3 },
+        { id: 16, name: "Хреновское", stock: 1150.0, area: 14184.0, roads: 77.5 },
+        { id: 17, name: "Пригородное", stock: 980.0, area: 12239.0, roads: 12.0 },
+        { id: 18, name: "Россошанское", stock: 840.0, area: 10485.0, roads: 2.9 },
+        { id: 19, name: "Сомовское", stock: 750.0, area: 9316.2, roads: 11.6 },
+        { id: 20, name: "Богучарское", stock: 620.0, area: 7332.0, roads: 10.1 },
+        { id: 21, name: "Кантемировское", stock: 510.0, area: 6332.0, roads: 1.1 },
+        { id: 22, name: "Эртильское", stock: 420.0, area: 3216.0, roads: 16.0 },
+        { id: 23, name: "Донское", stock: 310.0, area: 2717.0, roads: 1.0 }
+    ];
+
+    let enterprises = [
+        { id: 1, name: "ООО Фирма «Шипов лес»", econ: 5.0, ecol: 5.0, soc: 5.0 },
+        { id: 2, name: "ООО «Бобровский лес»", econ: 5.0, ecol: 5.0, soc: 4.0 },
+        { id: 3, name: "ООО «Бутурлиновский лесхоз»", econ: 4.0, ecol: 4.0, soc: 3.0 },
+        { id: 4, name: "ООО «ВоронежПромСтройЛес»", econ: 4.0, ecol: 3.0, soc: 2.5 },
+        { id: 5, name: "ООО «Орион»", econ: 3.0, ecol: 3.0, soc: 2.0 },
+        { id: 6, name: "ООО «Гранд-Галант»", econ: 3.0, ecol: 2.0, soc: 2.0 },
+        { id: 7, name: "ООО Предприятие «Эко-Интекс»", econ: 2.0, ecol: 2.0, soc: 1.0 }
+    ];
+
+    let wStock = 0.50;
+    let wRoads = 0.30;
+    let wArea = 0.20;
+
+    function changeWeight() {
+        let s = parseFloat(document.getElementById('sl-stock').value);
+        let r = parseFloat(document.getElementById('sl-roads').value);
+        let a = parseFloat(document.getElementById('sl-area').value);
+
+        let sum = s + r + a;
+        wStock = s / sum;
+        wRoads = r / sum;
+        wArea = a / sum;
+
+        document.getElementById('txt-w-stock').innerText = Math.round(wStock * 100) + '%';
+        document.getElementById('txt-w-roads').innerText = Math.round(wRoads * 100) + '%';
+        document.getElementById('txt-w-area').innerText = Math.round(wArea * 100) + '%';
+        document.getElementById('txt-sum-w').innerText = Math.round((wStock + wRoads + wArea) * 100) + '%';
+
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function resetToGost() {
+        document.getElementById('sl-stock').value = 50;
+        document.getElementById('sl-roads').value = 30;
+        document.getElementById('sl-area').value = 20;
+        wStock = 0.50;
+        wRoads = 0.30;
+        wArea = 0.20;
+        document.getElementById('txt-w-stock').innerText = '50%';
+        document.getElementById('txt-w-roads').innerText = '30%';
+        document.getElementById('txt-w-area').innerText = '20%';
+        document.getElementById('txt-sum-w').innerText = '100%';
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function recalculateAndRender() {
+        if (districts.length === 0) {
+            document.getElementById('tbl-body').innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px;">Нет данных</td></tr>';
+            return;
+        }
+
+        const stocks = districts.map(d => d.stock);
+        const areas = districts.map(d => d.area);
+        const roads = districts.map(d => d.roads);
+
+        const minStock = Math.min(...stocks), maxStock = Math.max(...stocks);
+        const minArea = Math.min(...areas), maxArea = Math.max(...areas);
+        const minRoads = Math.min(...roads), maxRoads = Math.max(...roads);
+
+        document.getElementById('cnt-objects').innerText = districts.length;
+        document.getElementById('max-stock-val').innerText = maxStock.toLocaleString('ru-RU') + ' тыс. м³';
+
+        // Calculation
+        districts.forEach(d => {
+            let nStock = maxStock > minStock ? (d.stock - minStock) / (maxStock - minStock) : 0;
+            let nArea = maxArea > minArea ? (d.area - minArea) / (maxArea - minArea) : 0;
+            let nRoads = maxRoads > minRoads ? (d.roads - minRoads) / (maxRoads - minRoads) : 0;
+            d.index = (nStock * wStock) + (nArea * wArea) + (nRoads * wRoads);
+        });
+
+        // Sort descending by index
+        districts.sort((a, b) => b.index - a.index);
+        districts.forEach((d, idx) => d.rank = idx + 1);
+
+        document.getElementById('txt-leader').innerText = districts[0].name;
+
+        // Render rows
+        const tbody = document.getElementById('tbl-body');
+        tbody.innerHTML = '';
+
+        districts.forEach(d => {
+            let tr = document.createElement('tr');
+
+            let rankClass = 'badge-rank';
+            if (d.rank <= 3) rankClass += ' rank-top';
+            else if (d.rank <= 10) rankClass += ' rank-mid';
+            else rankClass += ' rank-low';
+
+            let catClass = 'category-badge ';
+            let catText = '';
+            if (d.index >= 0.50) {
+                catClass += 'cat-priority';
+                catText = 'Первоочередное';
+            } else if (d.index >= 0.30) {
+                catClass += 'cat-standard';
+                catText = 'Вторичное';
+            } else {
+                catClass += 'cat-reserve';
+                catText = 'Резервный фонд';
+            }
+
+            tr.innerHTML = `
+                <td><span class="${rankClass}">#${d.rank}</span></td>
+                <td><input type="text" class="table-input table-input-name" value="${d.name}" onchange="updateRow(${d.id}, 'name', this.value)"></td>
+                <td><input type="number" step="10" class="table-input" value="${d.stock}" onchange="updateRow(${d.id}, 'stock', this.value)"></td>
+                <td><input type="number" step="100" class="table-input" value="${d.area}" onchange="updateRow(${d.id}, 'area', this.value)"></td>
+                <td><input type="number" step="5" class="table-input" value="${d.roads}" onchange="updateRow(${d.id}, 'roads', this.value)"></td>
+                <td class="score-cell">${d.index.toFixed(4)}</td>
+                <td><span class="${catClass}">${catText}</span></td>
+                <td style="text-align:center;"><button class="btn-danger-sm" onclick="deleteRow(${d.id})" title="Удалить строку">✕</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function updateRow(id, field, val) {
+        let item = districts.find(d => d.id === id);
+        if (!item) return;
+        if (field === 'name') item.name = val;
+        else item[field] = parseNumberSafe(val);
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function addNewDistrict() {
+        let newId = Date.now();
+        districts.push({
+            id: newId,
+            name: "Новый лесной участок",
+            stock: 3000.0,
+            area: 20000.0,
+            roads: 50.0
+        });
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function deleteRow(id) {
+        districts = districts.filter(d => d.id !== id);
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function parseNumberSafe(val) {
+        if (typeof val === 'number') return val;
+        if (!val) return 0;
+        let s = String(val).trim().replace(',', '.');
+        let n = parseFloat(s);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function getEulerVennZone(e, total) {
+        if (total >= 14) {
+            return "Абсолютная гармония (Социо-Эколого-Экономическая)";
+        }
+        let factors = [
+            { name: "Экономика", val: e.econ },
+            { name: "Экология", val: e.ecol },
+            { name: "Социум", val: e.soc }
+        ].sort((a, b) => b.val - a.val);
+
+        if (Math.abs(factors[0].val - factors[1].val) < 0.01 && factors[0].val > 0) {
+            return `Би-критериальная зона (${factors[0].name}-${factors[1].name})`;
+        }
+        return `Моно-доминанта: ${factors[0].name}`;
+    }
+
+    function renderEnterprises() {
+        const tbody = document.getElementById('tbl-body-ent');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        if (enterprises.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px;">Нет данных о предприятиях</td></tr>';
+            refreshEnterpriseStats();
+            return;
+        }
+
+        enterprises.forEach(e => {
+            let total = e.econ + e.ecol + e.soc;
+            let level = total >= 11 ? "Высокий уровень" : (total >= 6 ? "Средний уровень" : "Низкий уровень");
+            let levelClass = total >= 11 ? "badge-top" : (total >= 6 ? "cat-base" : "cat-reserve");
+            let zone = getEulerVennZone(e, total);
+
+            let tr = document.createElement('tr');
+            tr.id = `ent-row-${e.id}`;
+            tr.innerHTML = `
+                <td><input type="text" class="table-input table-input-name" value="${e.name}" oninput="updateEnterprise(${e.id}, 'name', this.value)"></td>
+                <td><input type="number" step="0.5" min="0" max="5" class="table-input" value="${e.econ}" oninput="updateEnterprise(${e.id}, 'econ', this.value)"></td>
+                <td><input type="number" step="0.5" min="0" max="5" class="table-input" value="${e.ecol}" oninput="updateEnterprise(${e.id}, 'ecol', this.value)"></td>
+                <td><input type="number" step="0.5" min="0" max="5" class="table-input" value="${e.soc}" oninput="updateEnterprise(${e.id}, 'soc', this.value)"></td>
+                <td class="score-cell" id="ent-score-${e.id}">${total.toFixed(1)} / 15</td>
+                <td id="ent-level-${e.id}"><span class="${levelClass}">${level}</span></td>
+                <td id="ent-zone-${e.id}"><span style="font-weight:500;">${zone}</span></td>
+                <td style="text-align:center;"><button class="btn-danger-sm" onclick="deleteEnterprise(${e.id})" title="Удалить предприятие">✕</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        refreshEnterpriseStats();
+    }
+
+    function updateEnterprise(id, field, val) {
+        let ent = enterprises.find(e => e.id === id);
+        if (!ent) return;
+        if (field === 'name') {
+            ent.name = val;
+        } else {
+            let num = parseNumberSafe(val);
+            ent[field] = Math.max(0, Math.min(5, num));
+        }
+
+        // Мгновенное обновление строки в реальном времени
+        let total = ent.econ + ent.ecol + ent.soc;
+        let level = total >= 11 ? "Высокий уровень" : (total >= 6 ? "Средний уровень" : "Низкий уровень");
+        let levelClass = total >= 11 ? "badge-top" : (total >= 6 ? "cat-base" : "cat-reserve");
+        let zone = getEulerVennZone(ent, total);
+
+        let scoreEl = document.getElementById(`ent-score-${id}`);
+        if (scoreEl) scoreEl.innerText = `${total.toFixed(1)} / 15`;
+
+        let levelEl = document.getElementById(`ent-level-${id}`);
+        if (levelEl) levelEl.innerHTML = `<span class="${levelClass}">${level}</span>`;
+
+        let zoneEl = document.getElementById(`ent-zone-${id}`);
+        if (zoneEl) zoneEl.innerHTML = `<span style="font-weight:500;">${zone}</span>`;
+
+        refreshEnterpriseStats();
+        triggerChange();
+    }
+
+    function refreshEnterpriseStats() {
+        let harmonyCount = 0;
+        let mediumCount = 0;
+        let sectorsMap = { harmony: [], bi: [], mono: [], low: [] };
+
+        let sorted = [...enterprises].sort((a, b) => (b.econ + b.ecol + b.soc) - (a.econ + a.ecol + a.soc));
+
+        enterprises.forEach(e => {
+            let total = e.econ + e.ecol + e.soc;
+            if (total >= 14) {
+                harmonyCount++;
+                sectorsMap.harmony.push({ name: e.name, total: total });
+            } else {
+                if (total >= 6 && total < 11) mediumCount++;
+                if (total < 6) sectorsMap.low.push({ name: e.name, total: total });
+
+                let factors = [
+                    { name: "Экономика", val: e.econ },
+                    { name: "Экология", val: e.ecol },
+                    { name: "Социум", val: e.soc }
+                ].sort((a, b) => b.val - a.val);
+
+                if (Math.abs(factors[0].val - factors[1].val) < 0.01 && factors[0].val > 0) {
+                    if (total >= 6) sectorsMap.bi.push({ name: e.name, total: total, desc: `${factors[0].name}+${factors[1].name}` });
+                } else {
+                    if (total >= 6) sectorsMap.mono.push({ name: e.name, total: total, desc: factors[0].name });
+                }
+            }
+        });
+
+        let cntEl = document.getElementById('cnt-enterprises');
+        if (cntEl) cntEl.innerText = enterprises.length;
+
+        let leaderEl = document.getElementById('txt-ent-leader');
+        if (leaderEl && sorted.length > 0) {
+            let topEnt = sorted[0];
+            let topTotal = topEnt.econ + topEnt.ecol + topEnt.soc;
+            leaderEl.innerText = `${topEnt.name} (${topTotal.toFixed(1)}/15)`;
+        }
+
+        let harmEl = document.getElementById('cnt-harmony');
+        if (harmEl) harmEl.innerText = `${harmonyCount} предприятий`;
+
+        let medEl = document.getElementById('cnt-medium');
+        if (medEl) medEl.innerText = `${mediumCount} предприятий`;
+
+        renderVennBreakdown(sectorsMap);
+    }
+
+    function renderVennBreakdown(map) {
+        const wrap = document.getElementById('venn-sectors-breakdown');
+        if (!wrap) return;
+
+        let html = '';
+
+        html += `<div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:6px; padding:10px 14px;">
+            <div style="font-weight:700; font-size:13px; color:#065F46; margin-bottom:4px;">🌿 Абсолютная гармония (пересечение всех сфер)</div>
+            <div style="font-size:12.5px; color:#047857;">${map.harmony.length ? map.harmony.map(x => `<b>${x.name}</b> (${x.total.toFixed(1)})`).join(', ') : '—'}</div>
+        </div>`;
+
+        html += `<div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; padding:10px 14px;">
+            <div style="font-weight:700; font-size:13px; color:#1E40AF; margin-bottom:4px;">🔷 Би-критериальные зоны (пересечение двух сфер)</div>
+            <div style="font-size:12.5px; color:#1D4ED8;">${map.bi.length ? map.bi.map(x => `<b>${x.name}</b> [${x.desc}] (${x.total.toFixed(1)})`).join(', ') : '—'}</div>
+        </div>`;
+
+        if (map.mono.length) {
+            html += `<div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:10px 14px;">
+                <div style="font-weight:700; font-size:13px; color:#92400E; margin-bottom:4px;">🔶 Моно-доминанта (одна преобладающая сфера)</div>
+                <div style="font-size:12.5px; color:#B45309;">${map.mono.map(x => `<b>${x.name}</b> [${x.desc}] (${x.total.toFixed(1)})`).join(', ')}</div>
+            </div>`;
+        }
+
+        if (map.low.length) {
+            html += `<div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:6px; padding:10px 14px;">
+                <div style="font-weight:700; font-size:13px; color:#991B1B; margin-bottom:4px;">⚠️ Кризисный уровень (балл &lt; 6.0)</div>
+                <div style="font-size:12.5px; color:#B91C1C;">${map.low.map(x => `<b>${x.name}</b> (${x.total.toFixed(1)})`).join(', ')}</div>
+            </div>`;
+        }
+
+        wrap.innerHTML = html;
+    }
+
+    function addNewEnterprise() {
+        let newId = Date.now();
+        enterprises.push({
+            id: newId,
+            name: "Новый арендатор",
+            econ: 3.0,
+            ecol: 3.0,
+            soc: 2.0
+        });
+        renderEnterprises();
+        triggerChange();
+    }
+
+    function deleteEnterprise(id) {
+        enterprises = enterprises.filter(e => e.id !== id);
+        renderEnterprises();
+        triggerChange();
+    }
+
+    function exportEnterprisesExcel() {
+        let csv = "data:text/csv;charset=utf-8,\uFEFF";
+        csv += "Предприятие;Экономика (0-5);Экология (0-5);Социум (0-5);Интегральный_балл;Уровень;Зона_Эйлера_Венна\n";
+        enterprises.forEach(e => {
+            let total = e.econ + e.ecol + e.soc;
+            let level = total >= 11 ? "Высокий уровень" : (total >= 6 ? "Средний уровень" : "Низкий уровень");
+            let zone = getEulerVennZone(e, total);
+            csv += `${e.name};${e.econ};${e.ecol};${e.soc};${total.toFixed(1)};${level};${zone}\n`;
+        });
+        const encoded = encodeURI(csv);
+        const link = document.createElement("a");
+        link.setAttribute("href", encoded);
+        link.setAttribute("download", "Оценка_Арендаторов_Экспорт.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function resetEnterprisesToMonograph() {
+        enterprises = [
+            { id: 1, name: "ООО Фирма «Шипов лес»", econ: 5.0, ecol: 5.0, soc: 5.0 },
+            { id: 2, name: "ООО «Бобровский лес»", econ: 5.0, ecol: 5.0, soc: 4.0 },
+            { id: 3, name: "ООО «Бутурлиновский лесхоз»", econ: 4.0, ecol: 4.0, soc: 3.0 },
+            { id: 4, name: "ООО «ВоронежПромСтройЛес»", econ: 4.0, ecol: 3.0, soc: 2.5 },
+            { id: 5, name: "ООО «Орион»", econ: 3.0, ecol: 3.0, soc: 2.0 },
+            { id: 6, name: "ООО «Гранд-Галант»", econ: 3.0, ecol: 2.0, soc: 2.0 },
+            { id: 7, name: "ООО Предприятие «Эко-Интекс»", econ: 2.0, ecol: 2.0, soc: 1.0 }
+        ];
+        renderEnterprises();
+        triggerChange();
+    }
+
+    function exportDataExcel() {
+        let csv = "data:text/csv;charset=utf-8,\uFEFF";
+        csv += "Ранг;Лесничество;Запас_тыс_м3;Площадь_га;Дороги_км;Интегральный_индекс\n";
+        districts.forEach(d => {
+            csv += `${d.rank};${d.name};${d.stock};${d.area};${d.roads};${d.index.toFixed(4)}\n`;
+        });
+        const encoded = encodeURI(csv);
+        const link = document.createElement("a");
+        link.setAttribute("href", encoded);
+        link.setAttribute("download", "ЛесОптима_Экспорт.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (event && event.target) {
+            event.target.classList.add('active');
+        }
+    }
+
+    // ==========================================
+    // СИСТЕМА ПЕРСИСТЕНТНЫХ СЦЕНАРИЕВ (WORKSPACES)
+    // ==========================================
+    let isWorkspaceReady = false;
+    let autoSaveTimeout = null;
+    let currentWsId = getInitialWorkspaceId();
+    let currentWsName = "Основной расчет (Монография ВГЛТУ)";
+
+    function getInitialWorkspaceId() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let idFromUrl = urlParams.get('w');
+        if (idFromUrl && idFromUrl.trim()) {
+            return idFromUrl.trim();
+        }
+        let idFromStorage = localStorage.getItem('forest_optima_active_ws');
+        if (idFromStorage && idFromStorage.trim()) {
+            return idFromStorage.trim();
+        }
+        return 'ws_' + Math.random().toString(36).substring(2, 10);
+    }
+
+    function setSyncBadge(state, customText) {
+        const pill = document.getElementById('ws-sync-status');
+        const dot = document.getElementById('ws-status-dot');
+        const text = document.getElementById('ws-status-text');
+        if (!pill || !dot || !text) return;
+
+        pill.className = 'ws-status-pill';
+        if (state === 'saving') {
+            pill.classList.add('ws-status-saving');
+            dot.innerText = '⏳';
+            text.innerText = customText || 'Синхронизация...';
+        } else if (state === 'offline') {
+            pill.classList.add('ws-status-offline');
+            dot.innerText = '💾';
+            text.innerText = customText || 'Сохранено локально';
+        } else {
+            pill.classList.add('ws-status-synced');
+            dot.innerText = '●';
+            text.innerText = customText || 'Синхронизировано';
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('ws-toast');
+        if (!toast) return;
+        toast.innerText = message;
+        toast.style.display = 'block';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3200);
+    }
+
+    function triggerChange() {
+        if (!isWorkspaceReady) return;
+        scheduleAutoSave();
+    }
+
+    function scheduleAutoSave() {
+        setSyncBadge('saving');
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(() => {
+            saveWorkspace();
+        }, 600);
+    }
+
+    async function saveWorkspace() {
+        const payloadData = {
+            weights: { stock: wStock, area: wArea, roads: wRoads },
+            districts: districts,
+            enterprises: enterprises
+        };
+
+        // Сохраняем в localStorage для надежности
+        try {
+            localStorage.setItem(`forest_ws_${currentWsId}`, JSON.stringify({
+                uid: currentWsId,
+                name: currentWsName,
+                data: payloadData,
+                updated_at: new Date().toISOString()
+            }));
+            localStorage.setItem('forest_optima_active_ws', currentWsId);
+        } catch (e) {
+            console.warn("LocalStorage save warning", e);
+        }
+
+        // Синхронизация с сервером
+        try {
+            const resp = await fetch(`/api/workspace/${encodeURIComponent(currentWsId)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: currentWsName,
+                    data: payloadData
+                })
+            });
+            if (resp.ok) {
+                setSyncBadge('synced');
+            } else {
+                setSyncBadge('offline', 'Локальный режим');
+            }
+        } catch (err) {
+            setSyncBadge('offline', 'Локальный режим');
+        }
+    }
+
+    async function initWorkspace() {
+        const badge = document.getElementById('ws-id-badge');
+        if (badge) badge.innerText = `ID: ${currentWsId}`;
+
+        const nameInput = document.getElementById('ws-name-input');
+        if (nameInput) nameInput.value = currentWsName;
+
+        const currentUrl = new URL(window.location.href);
+        if (currentUrl.searchParams.get('w') !== currentWsId) {
+            currentUrl.searchParams.set('w', currentWsId);
+            window.history.replaceState({}, '', currentUrl.toString());
+        }
+
+        setSyncBadge('saving', 'Загрузка...');
+
+        let loaded = false;
+        try {
+            const resp = await fetch(`/api/workspace/${encodeURIComponent(currentWsId)}`);
+            if (resp.ok) {
+                const ws = await resp.json();
+                applyWorkspaceState(ws);
+                loaded = true;
+                setSyncBadge('synced');
+            }
+        } catch (e) {
+            console.log("Сервер недоступен, проверяем локальное хранилище");
+        }
+
+        if (!loaded) {
+            try {
+                const local = localStorage.getItem(`forest_ws_${currentWsId}`);
+                if (local) {
+                    const ws = JSON.parse(local);
+                    applyWorkspaceState(ws);
+                    setSyncBadge('offline');
+                } else {
+                    setSyncBadge('synced');
+                }
+            } catch (e) {
+                setSyncBadge('synced');
+            }
+        }
+
+        isWorkspaceReady = true;
+    }
+
+    function applyWorkspaceState(ws) {
+        if (ws.name) {
+            currentWsName = ws.name;
+            const nameInput = document.getElementById('ws-name-input');
+            if (nameInput) nameInput.value = currentWsName;
+        }
+
+        if (ws.data) {
+            if (Array.isArray(ws.data.districts) && ws.data.districts.length > 0) {
+                districts = ws.data.districts;
+            }
+            if (Array.isArray(ws.data.enterprises) && ws.data.enterprises.length > 0) {
+                enterprises = ws.data.enterprises;
+            }
+            if (ws.data.weights) {
+                wStock = ws.data.weights.stock ?? 0.5;
+                wArea = ws.data.weights.area ?? 0.2;
+                wRoads = ws.data.weights.roads ?? 0.3;
+
+                let slStock = document.getElementById('sl-stock');
+                let slRoads = document.getElementById('sl-roads');
+                let slArea = document.getElementById('sl-area');
+                if (slStock) slStock.value = Math.round(wStock * 100);
+                if (slRoads) slRoads.value = Math.round(wRoads * 100);
+                if (slArea) slArea.value = Math.round(wArea * 100);
+
+                let twStock = document.getElementById('txt-w-stock');
+                let twRoads = document.getElementById('txt-w-roads');
+                let twArea = document.getElementById('txt-w-area');
+                let twSum = document.getElementById('txt-sum-w');
+                if (twStock) twStock.innerText = Math.round(wStock * 100) + '%';
+                if (twRoads) twRoads.innerText = Math.round(wRoads * 100) + '%';
+                if (twArea) twArea.innerText = Math.round(wArea * 100) + '%';
+                if (twSum) twSum.innerText = Math.round((wStock + wRoads + wArea) * 100) + '%';
+            }
+        }
+
+        recalculateAndRender();
+        renderEnterprises();
+    }
+
+    function onWorkspaceNameChange(val) {
+        currentWsName = val.trim() || `Расчет #${currentWsId.substring(0, 6)}`;
+        triggerChange();
+    }
+
+    function copyWorkspaceShareLink() {
+        const url = window.location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Ссылка на расчет скопирована в буфер обмена!");
+            }).catch(() => {
+                prompt("Скопируйте постоянную ссылку на ваш расчет:", url);
+            });
+        } else {
+            prompt("Скопируйте постоянную ссылку на ваш расчет:", url);
+        }
+    }
+
+    function createNewWorkspace() {
+        const newId = 'ws_' + Math.random().toString(36).substring(2, 10);
+        const newName = prompt("Введите наименование нового сценария:", "Сценарий лесного фонда " + new Date().toLocaleDateString('ru-RU'));
+        if (newName === null) return;
+
+        currentWsId = newId;
+        currentWsName = newName.trim() || `Сценарий #${newId.substring(0, 6)}`;
+
+        resetDistrictsToDefaults();
+        resetEnterprisesToMonograph();
+        resetToGost();
+
+        const badge = document.getElementById('ws-id-badge');
+        if (badge) badge.innerText = `ID: ${currentWsId}`;
+        const nameInput = document.getElementById('ws-name-input');
+        if (nameInput) nameInput.value = currentWsName;
+
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('w', currentWsId);
+        window.history.pushState({}, '', currentUrl.toString());
+
+        saveWorkspace();
+        showToast("Создан новый расчет: " + currentWsName);
+    }
+
+    function resetDistrictsToDefaults() {
+        districts = [
+            { id: 1, name: "Теллермановское", stock: 6546.2, area: 40549.7, roads: 415.7 },
+            { id: 2, name: "Воронежское", stock: 5124.1, area: 27165.0, roads: 142.8 },
+            { id: 3, name: "Бутурлиновское", stock: 4965.4, area: 24146.0, roads: 40.1 },
+            { id: 4, name: "Острогожское", stock: 4673.6, area: 26463.0, roads: 24.5 },
+            { id: 5, name: "Бобровское", stock: 3946.9, area: 26113.0, roads: 62.2 },
+            { id: 6, name: "Воронцовское", stock: 3805.2, area: 15913.0, roads: 15.9 },
+            { id: 7, name: "Калачеевское", stock: 3276.8, area: 27213.6, roads: 70.1 },
+            { id: 8, name: "Аннинское", stock: 3253.6, area: 20235.0, roads: 65.6 },
+            { id: 9, name: "Савальское", stock: 2543.4, area: 18499.0, roads: 14.7 },
+            { id: 10, name: "Павловское", stock: 2417.4, area: 74675.0, roads: 113.5 },
+            { id: 11, name: "Давыдовское", stock: 1850.0, area: 31776.0, roads: 35.2 },
+            { id: 12, name: "Новоусманское", stock: 1620.0, area: 22799.0, roads: 8.4 },
+            { id: 13, name: "Семилукское", stock: 1450.0, area: 18302.0, roads: 81.4 },
+            { id: 14, name: "Новохоперское", stock: 1380.0, area: 17041.0, roads: 2.5 },
+            { id: 15, name: "Песковское", stock: 1290.0, area: 16419.0, roads: 24.3 },
+            { id: 16, name: "Хреновское", stock: 1150.0, area: 14184.0, roads: 77.5 },
+            { id: 17, name: "Пригородное", stock: 980.0, area: 12239.0, roads: 12.0 },
+            { id: 18, name: "Россошанское", stock: 840.0, area: 10485.0, roads: 2.9 },
+            { id: 19, name: "Сомовское", stock: 750.0, area: 9316.2, roads: 11.6 },
+            { id: 20, name: "Богучарское", stock: 620.0, area: 7332.0, roads: 10.1 },
+            { id: 21, name: "Кантемировское", stock: 510.0, area: 6332.0, roads: 1.1 },
+            { id: 22, name: "Эртильское", stock: 420.0, area: 3216.0, roads: 16.0 },
+            { id: 23, name: "Донское", stock: 310.0, area: 2717.0, roads: 1.0 }
+        ];
+        recalculateAndRender();
+    }
+
+    async function openWorkspacesModal() {
+        const modal = document.getElementById('ws-modal');
+        const listEl = document.getElementById('ws-modal-list');
+        if (!modal || !listEl) return;
+
+        modal.style.display = 'flex';
+        listEl.innerHTML = '<div style="text-align:center; padding:16px; color:#64748B;">Загрузка списка сценариев...</div>';
+
+        let items = [];
+        try {
+            const resp = await fetch('/api/workspaces');
+            if (resp.ok) {
+                items = await resp.json();
+            }
+        } catch (e) {
+            console.log("Серверные сценарии недоступны");
+        }
+
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('forest_ws_')) {
+                    const localData = JSON.parse(localStorage.getItem(key));
+                    if (localData && !items.some(x => x.uid === localData.uid)) {
+                        items.push({
+                            uid: localData.uid,
+                            name: localData.name || localData.uid,
+                            updated_at: localData.updated_at || new Date().toISOString()
+                        });
+                    }
+                }
+            }
+        } catch (e) {}
+
+        if (items.length === 0) {
+            listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#64748B;">Нет сохраненных сценариев</div>';
+            return;
+        }
+
+        listEl.innerHTML = '';
+        items.forEach(item => {
+            const isCur = item.uid === currentWsId;
+            const row = document.createElement('div');
+            row.className = `ws-list-item ${isCur ? 'active' : ''}`;
+            const dateStr = item.updated_at ? new Date(item.updated_at).toLocaleString('ru-RU') : '—';
+            row.innerHTML = `
+                <div>
+                    <div style="font-weight:700; font-size:14px; color:var(--primary);">${escapeHtml(item.name)} ${isCur ? '<span style="font-size:11px; background:#10B981; color:white; padding:2px 6px; border-radius:3px; margin-left:6px;">Текущий</span>' : ''}</div>
+                    <div style="font-size:12px; color:var(--text-muted); font-family:monospace; margin-top:2px;">ID: ${item.uid} · Обновлен: ${dateStr}</div>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn-ws btn-ws-primary" onclick="switchWorkspace('${item.uid}')" style="padding:4px 10px; font-size:12px;">Открыть</button>
+                    ${!isCur ? `<button class="btn-danger-sm" onclick="deleteWorkspaceItem('${item.uid}', event)" title="Удалить сценарий">✕</button>` : ''}
+                </div>
+            `;
+            listEl.appendChild(row);
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function closeWorkspacesModal() {
+        const modal = document.getElementById('ws-modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    function switchWorkspace(uid) {
+        closeWorkspacesModal();
+        if (uid === currentWsId) return;
+        currentWsId = uid;
+        localStorage.setItem('forest_optima_active_ws', uid);
+        const url = new URL(window.location.href);
+        url.searchParams.set('w', uid);
+        window.history.pushState({}, '', url.toString());
+        initWorkspace();
+        showToast("Загружен сценарий #" + uid);
+    }
+
+    async function deleteWorkspaceItem(uid, e) {
+        if (e) e.stopPropagation();
+        if (!confirm(`Удалить сценарий ${uid}?`)) return;
+
+        try {
+            await fetch(`/api/workspace/${encodeURIComponent(uid)}`, { method: 'DELETE' });
+        } catch (err) {}
+        try {
+            localStorage.removeItem(`forest_ws_${uid}`);
+        } catch (err) {}
+
+        openWorkspacesModal();
+        showToast("Сценарий удален");
+    }
+
+    async function downloadServerExcelReport() {
+        showToast("Формирование официального отчета Excel...");
+        try {
+            const payload = {
+                weights: { stock: wStock, area: wArea, roads: wRoads },
+                districts: districts.map(d => ({
+                    id: d.id,
+                    name: d.name,
+                    stock: parseNumberSafe(d.stock),
+                    area: parseNumberSafe(d.area),
+                    roads: parseNumberSafe(d.roads)
+                })),
+                enterprises: enterprises.map(e => ({
+                    id: e.id,
+                    name: e.name,
+                    econ: parseNumberSafe(e.econ),
+                    ecol: parseNumberSafe(e.ecol),
+                    soc: parseNumberSafe(e.soc)
+                }))
+            };
+
+            const resp = await fetch('/api/export/excel', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!resp.ok) {
+                throw new Error("Сервер вернул ошибку " + resp.status);
+            }
+
+            const blob = await resp.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = `ЛесОптима_${currentWsId}_Отчет.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(downloadUrl);
+            showToast("Отчет Excel успешно сформирован и скачан!");
+        } catch (err) {
+            console.error("Ошибка скачивания с сервера", err);
+            showToast("Сервер недоступен. Экспортируем данные в CSV...");
+            exportDataExcel();
+        }
+    }
+
+    // Init
+    recalculateAndRender();
+    renderEnterprises();
+    initWorkspace();
+</script>
+
+<!-- Modal: Сохраненные сценарии -->
+<div id="ws-modal" class="modal-overlay" onclick="if(event.target===this) closeWorkspacesModal()">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Сохраненные сценарии расчетов</h3>
+            <button class="btn-ws" onclick="closeWorkspacesModal()">✕</button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+            Выберите сценарий для загрузки или создайте новый. Данные изолированы и автоматически синхронизируются с сервером.
+        </p>
+        <div id="ws-modal-list"></div>
+        <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+            <button class="btn-ws btn-ws-primary" onclick="createNewWorkspace()">➕ Создать новый сценарий</button>
+            <button class="btn-ws" onclick="closeWorkspacesModal()">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div id="ws-toast"></div>
+
+</body>
+</html>
+
