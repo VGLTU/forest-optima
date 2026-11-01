@@ -70,7 +70,7 @@ app.add_middleware(
 )
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def serve_index():
     """Отдача основного одностраничного веб-интерфейса калькулятора."""
     if not HTML_FILE_PATH.exists():
