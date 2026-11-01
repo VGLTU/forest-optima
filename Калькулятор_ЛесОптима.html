@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Информационно-аналитический комплекс «Лес-Оптима» | ВГЛТУ</title>
+    <title>Программный комплекс «ForestOptima» | ВГЛТУ</title>
     <style>
         :root {
-            --primary: #1E3A5F;
-            --primary-hover: #162B47;
-            --forest: #2E7D32;
-            --forest-light: #E8F5E9;
-            --border: #DDE2E5;
-            --bg: #F8FAFB;
+            --primary: #0A4D34; /* Корпоративный темно-зеленый цвет ВГЛТУ */
+            --primary-hover: #073826;
+            --forest: #0D6E48;
+            --forest-light: #E8F5EE;
+            --border: #D1DCD6;
+            --bg: #F4F7F5;
             --card-bg: #FFFFFF;
-            --text: #212529;
-            --text-muted: #6C757D;
+            --text: #1C2826;
+            --text-muted: #5C6F68;
         }
 
         * {
@@ -35,7 +35,7 @@
             background: var(--primary);
             color: white;
             padding: 20px 32px;
-            border-bottom: 3px solid #162B47;
+            border-bottom: 3px solid #063524;
         }
 
         .header-content {
@@ -172,13 +172,41 @@
             font-size: 12px;
         }
 
+        .weight-input-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+
+        .weight-num-input {
+            width: 44px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: right;
+            outline: none;
+            background: transparent;
+        }
+
+        .weight-unit {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
         input[type="range"] {
             width: 100%;
-            height: 5px;
-            background: #CED4DA;
+            height: 6px;
+            background: #D1DCD6;
             border-radius: 3px;
             outline: none;
             cursor: pointer;
+            accent-color: var(--primary);
         }
 
         /* Summary Stats */
@@ -646,8 +674,8 @@
 <header>
     <div class="header-content">
         <div class="header-title">
-            <h1>Программный комплекс «Лес-Оптима» v1.0</h1>
-            <p>Система поддержки принятия решений: многокритериальная оценка и ранжирование лесного фонда (ВГЛТУ)</p>
+            <h1>Программный комплекс «ForestOptima»</h1>
+            <p>Программный комплекс многокритериальной оценки лесных ресурсов и ресурсного потенциала лесничеств и лесопользователей, а также сценарного моделирования лесного фонда</p>
         </div>
     </div>
 </header>
@@ -682,7 +710,7 @@
     <!-- Tabs Navigation -->
     <div class="nav-tabs">
         <button class="nav-tab-btn active" onclick="switchTab('tab-districts')">Ранжирование лесничеств</button>
-        <button class="nav-tab-btn" onclick="switchTab('tab-enterprises')">Оценка предприятий-арендаторов</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-enterprises')">Оценка лесопользователей</button>
     </div>
 
     <!-- TAB 1: DISTRICTS -->
@@ -691,8 +719,9 @@
         <div class="card">
             <div class="card-header-flex">
                 <div class="card-title">Параметры многокритериальной модели (весовые коэффициенты)</div>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn btn-outline" onclick="resetToGost()">Сбросить веса (50% / 30% / 20%)</button>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn btn-outline" onclick="resetToGost()">Сбросить веса (50 / 30 / 20)</button>
+                    <button class="btn btn-outline" onclick="resetToEqualWeights()">Поровну (33 / 33 / 34)</button>
                     <button class="btn btn-forest" onclick="exportDataExcel()">Экспорт таблицы в Excel</button>
                 </div>
             </div>
@@ -701,25 +730,34 @@
                 <div class="weight-item">
                     <div class="weight-header">
                         <span>Запас древесины (w₁)</span>
-                        <span id="txt-w-stock" class="weight-val">50%</span>
+                        <div class="weight-input-wrap">
+                            <input type="number" id="num-stock" min="0" max="100" step="1" value="50" class="weight-num-input" oninput="changeWeight('stock', this.value)">
+                            <span class="weight-unit">%</span>
+                        </div>
                     </div>
-                    <input type="range" id="sl-stock" min="5" max="80" step="5" value="50" oninput="changeWeight('stock')">
+                    <input type="range" id="sl-stock" min="0" max="100" step="1" value="50" oninput="changeWeight('stock', this.value)">
                 </div>
 
                 <div class="weight-item">
                     <div class="weight-header">
                         <span>Дорожная инфраструктура (w₂)</span>
-                        <span id="txt-w-roads" class="weight-val">30%</span>
+                        <div class="weight-input-wrap">
+                            <input type="number" id="num-roads" min="0" max="100" step="1" value="30" class="weight-num-input" oninput="changeWeight('roads', this.value)">
+                            <span class="weight-unit">%</span>
+                        </div>
                     </div>
-                    <input type="range" id="sl-roads" min="5" max="80" step="5" value="30" oninput="changeWeight('roads')">
+                    <input type="range" id="sl-roads" min="0" max="100" step="1" value="30" oninput="changeWeight('roads', this.value)">
                 </div>
 
                 <div class="weight-item">
                     <div class="weight-header">
                         <span>Разрешенная площадь (w₃)</span>
-                        <span id="txt-w-area" class="weight-val">20%</span>
+                        <div class="weight-input-wrap">
+                            <input type="number" id="num-area" min="0" max="100" step="1" value="20" class="weight-num-input" oninput="changeWeight('area', this.value)">
+                            <span class="weight-unit">%</span>
+                        </div>
                     </div>
-                    <input type="range" id="sl-area" min="5" max="80" step="5" value="20" oninput="changeWeight('area')">
+                    <input type="range" id="sl-area" min="0" max="100" step="1" value="20" oninput="changeWeight('area', this.value)">
                 </div>
             </div>
         </div>
@@ -748,7 +786,10 @@
         <div class="card" style="padding: 0; overflow: hidden;">
             <div style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
                 <div class="card-title">Реестр лесничеств (данные можно редактировать прямо в ячейках)</div>
-                <button class="btn btn-primary" onclick="addNewDistrict()">+ Добавить лесничество</button>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-outline" onclick="resetDistrictsToDefaults()" title="Восстановить полный реестр всех 23 лесничеств Воронежской области">Базовый список (23 лесничества)</button>
+                    <button class="btn btn-primary" onclick="addNewDistrict()">+ Добавить лесничество</button>
+                </div>
             </div>
 
             <div class="table-wrap">
@@ -778,29 +819,28 @@
         <!-- Summary Statistics for Enterprises -->
         <div class="stats-row">
             <div class="stat-box">
-                <div class="stat-box-title">Всего предприятий в базе</div>
+                <div class="stat-box-title">Всего лесопользователей в базе</div>
                 <div id="cnt-enterprises" class="stat-box-val">7</div>
             </div>
             <div class="stat-box">
-                <div class="stat-box-title">Лидер устойчивости</div>
+                <div class="stat-box-title">Лидер оценки</div>
                 <div id="txt-ent-leader" class="stat-box-val" style="color: var(--forest); font-size: 16px;">ООО «Шипов лес» (15/15)</div>
             </div>
             <div class="stat-box">
-                <div class="stat-box-title">В зоне абсолютной гармонии</div>
-                <div id="cnt-harmony" class="stat-box-val" style="color: #2E7D32;">2 предприятия</div>
+                <div class="stat-box-title">В зоне абсолютной устойчивости</div>
+                <div id="cnt-harmony" class="stat-box-val" style="color: var(--forest);">2 лесопользователя</div>
             </div>
             <div class="stat-box">
-                <div class="stat-box-title">Средний уровень развития</div>
-                <div id="cnt-medium" class="stat-box-val" style="color: #0288D1;">4 предприятия</div>
+                <div class="stat-box-title">Средний уровень устойчивости</div>
+                <div id="cnt-medium" class="stat-box-val" style="color: #0288D1;">3 лесопользователя</div>
             </div>
         </div>
 
         <div class="card" style="padding: 0; overflow: hidden;">
             <div style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
-                <div class="card-title">Классификация предприятий-арендаторов (матрица Эйлера-Венна)</div>
+                <div class="card-title">Классификация лесопользователей (матрица Эйлера-Венна)</div>
                 <div style="display:flex; gap:8px;">
-                    <button class="btn btn-outline" onclick="resetEnterprisesToMonograph()">Сбросить к данным монографии</button>
-                    <button class="btn btn-primary" onclick="addNewEnterprise()">+ Добавить предприятие</button>
+                    <button class="btn btn-primary" onclick="addNewEnterprise()">+ Добавить лесопользователя</button>
                     <button class="btn btn-forest" onclick="exportEnterprisesExcel()">Экспорт таблицы в Excel</button>
                 </div>
             </div>
@@ -808,7 +848,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Наименование предприятия</th>
+                            <th>Наименование лесопользователя</th>
                             <th style="width: 140px;">Экономика (0-5)</th>
                             <th style="width: 140px;">Экология (0-5)</th>
                             <th style="width: 140px;">Социум (0-5)</th>
@@ -831,7 +871,7 @@
                 <div>
                     <div class="card-title">Графическое позиционирование в матрице Эйлера-Венна</div>
                     <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
-                        Интерактивная карта распределения предприятий по секторам устойчивого развития (пересчитывается на лету)
+                        Интерактивная карта распределения лесопользователей по секторам устойчивого социо-эколого-экономического развития (для удобства последующего формирования аналитических выводов)
                     </div>
                 </div>
             </div>
@@ -912,20 +952,38 @@
     let wRoads = 0.30;
     let wArea = 0.20;
 
-    function changeWeight() {
-        let s = parseFloat(document.getElementById('sl-stock').value);
-        let r = parseFloat(document.getElementById('sl-roads').value);
-        let a = parseFloat(document.getElementById('sl-area').value);
+    function changeWeight(field, rawVal) {
+        if (field && rawVal !== undefined) {
+            let val = Math.max(0, Math.min(100, Math.round(parseFloat(rawVal) || 0)));
+            let slEl = document.getElementById(`sl-${field}`);
+            let numEl = document.getElementById(`num-${field}`);
+            if (slEl) slEl.value = val;
+            if (numEl) numEl.value = val;
+        }
+
+        let s = parseFloat(document.getElementById('sl-stock')?.value) || 0;
+        let r = parseFloat(document.getElementById('sl-roads')?.value) || 0;
+        let a = parseFloat(document.getElementById('sl-area')?.value) || 0;
 
         let sum = s + r + a;
-        wStock = s / sum;
-        wRoads = r / sum;
-        wArea = a / sum;
+        if (sum > 0) {
+            wStock = s / sum;
+            wRoads = r / sum;
+            wArea = a / sum;
+        } else {
+            wStock = 1 / 3;
+            wRoads = 1 / 3;
+            wArea = 1 / 3;
+        }
 
-        document.getElementById('txt-w-stock').innerText = Math.round(wStock * 100) + '%';
-        document.getElementById('txt-w-roads').innerText = Math.round(wRoads * 100) + '%';
-        document.getElementById('txt-w-area').innerText = Math.round(wArea * 100) + '%';
-        document.getElementById('txt-sum-w').innerText = Math.round((wStock + wRoads + wArea) * 100) + '%';
+        let sumEl = document.getElementById('txt-sum-w');
+        if (sumEl) {
+            if (Math.round(sum) === 100) {
+                sumEl.innerHTML = '<span style="color:var(--forest);">100%</span>';
+            } else {
+                sumEl.innerHTML = `<span style="color:#B45309;" title="Сумма ${Math.round(sum)}%: веса автоматически нормируются">${Math.round(sum)}% (норм.)</span>`;
+            }
+        }
 
         recalculateAndRender();
         triggerChange();
@@ -933,15 +991,32 @@
 
     function resetToGost() {
         document.getElementById('sl-stock').value = 50;
+        document.getElementById('num-stock').value = 50;
         document.getElementById('sl-roads').value = 30;
+        document.getElementById('num-roads').value = 30;
         document.getElementById('sl-area').value = 20;
+        document.getElementById('num-area').value = 20;
         wStock = 0.50;
         wRoads = 0.30;
         wArea = 0.20;
-        document.getElementById('txt-w-stock').innerText = '50%';
-        document.getElementById('txt-w-roads').innerText = '30%';
-        document.getElementById('txt-w-area').innerText = '20%';
-        document.getElementById('txt-sum-w').innerText = '100%';
+        let sumEl = document.getElementById('txt-sum-w');
+        if (sumEl) sumEl.innerHTML = '<span style="color:var(--forest);">100%</span>';
+        recalculateAndRender();
+        triggerChange();
+    }
+
+    function resetToEqualWeights() {
+        document.getElementById('sl-stock').value = 33;
+        document.getElementById('num-stock').value = 33;
+        document.getElementById('sl-roads').value = 33;
+        document.getElementById('num-roads').value = 33;
+        document.getElementById('sl-area').value = 34;
+        document.getElementById('num-area').value = 34;
+        wStock = 0.3333;
+        wRoads = 0.3333;
+        wArea = 0.3334;
+        let sumEl = document.getElementById('txt-sum-w');
+        if (sumEl) sumEl.innerHTML = '<span style="color:var(--forest);">100%</span>';
         recalculateAndRender();
         triggerChange();
     }
@@ -1094,12 +1169,21 @@
                 <td class="score-cell" id="ent-score-${e.id}">${total.toFixed(1)} / 15</td>
                 <td id="ent-level-${e.id}"><span class="${levelClass}">${level}</span></td>
                 <td id="ent-zone-${e.id}"><span style="font-weight:500;">${zone}</span></td>
-                <td style="text-align:center;"><button class="btn-danger-sm" onclick="deleteEnterprise(${e.id})" title="Удалить предприятие">✕</button></td>
+                <td style="text-align:center;"><button class="btn-danger-sm" onclick="deleteEnterprise(${e.id})" title="Удалить лесопользователя">✕</button></td>
             `;
             tbody.appendChild(tr);
         });
 
         refreshEnterpriseStats();
+    }
+
+    function pluralizeLesopolzovatel(n) {
+        let abs = Math.abs(n) % 100;
+        let n1 = abs % 10;
+        if (abs > 10 && abs < 20) return "лесопользователей";
+        if (n1 > 1 && n1 < 5) return "лесопользователя";
+        if (n1 === 1) return "лесопользователь";
+        return "лесопользователей";
     }
 
     function updateEnterprise(id, field, val) {
@@ -1172,10 +1256,10 @@
         }
 
         let harmEl = document.getElementById('cnt-harmony');
-        if (harmEl) harmEl.innerText = `${harmonyCount} предприятий`;
+        if (harmEl) harmEl.innerText = `${harmonyCount} ${pluralizeLesopolzovatel(harmonyCount)}`;
 
         let medEl = document.getElementById('cnt-medium');
-        if (medEl) medEl.innerText = `${mediumCount} предприятий`;
+        if (medEl) medEl.innerText = `${mediumCount} ${pluralizeLesopolzovatel(mediumCount)}`;
 
         renderVennBreakdown(sectorsMap);
     }
@@ -1187,7 +1271,7 @@
         let html = '';
 
         html += `<div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:6px; padding:10px 14px;">
-            <div style="font-weight:700; font-size:13px; color:#065F46; margin-bottom:4px;">🌿 Абсолютная гармония (пересечение всех сфер)</div>
+            <div style="font-weight:700; font-size:13px; color:#065F46; margin-bottom:4px;">🌿 Абсолютная устойчивость (пересечение всех сфер)</div>
             <div style="font-size:12.5px; color:#047857;">${map.harmony.length ? map.harmony.map(x => `<b>${x.name}</b> (${x.total.toFixed(1)})`).join(', ') : '—'}</div>
         </div>`;
 
@@ -1217,7 +1301,7 @@
         let newId = Date.now();
         enterprises.push({
             id: newId,
-            name: "Новый арендатор",
+            name: "Новый лесопользователь",
             econ: 3.0,
             ecol: 3.0,
             soc: 2.0
@@ -1234,7 +1318,7 @@
 
     function exportEnterprisesExcel() {
         let csv = "data:text/csv;charset=utf-8,\uFEFF";
-        csv += "Предприятие;Экономика (0-5);Экология (0-5);Социум (0-5);Интегральный_балл;Уровень;Зона_Эйлера_Венна\n";
+        csv += "Лесопользователь;Экономика (0-5);Экология (0-5);Социум (0-5);Интегральный_балл;Уровень;Зона_Эйлера_Венна\n";
         enterprises.forEach(e => {
             let total = e.econ + e.ecol + e.soc;
             let level = total >= 11 ? "Высокий уровень" : (total >= 6 ? "Средний уровень" : "Низкий уровень");
@@ -1376,8 +1460,19 @@
     }
 
     async function saveWorkspace() {
+        const rawStock = parseFloat(document.getElementById('sl-stock')?.value) || 50;
+        const rawRoads = parseFloat(document.getElementById('sl-roads')?.value) || 30;
+        const rawArea = parseFloat(document.getElementById('sl-area')?.value) || 20;
+
         const payloadData = {
-            weights: { stock: wStock, area: wArea, roads: wRoads },
+            weights: {
+                stock: wStock,
+                area: wArea,
+                roads: wRoads,
+                raw_stock: rawStock,
+                raw_roads: rawRoads,
+                raw_area: rawArea
+            },
             districts: districts,
             enterprises: enterprises
         };
@@ -1483,25 +1578,43 @@
                 enterprises = ws.data.enterprises;
             }
             if (ws.data.weights) {
-                wStock = ws.data.weights.stock ?? 0.5;
-                wArea = ws.data.weights.area ?? 0.2;
-                wRoads = ws.data.weights.roads ?? 0.3;
+                let rawS = ws.data.weights.raw_stock !== undefined ? ws.data.weights.raw_stock : Math.round((ws.data.weights.stock ?? 0.5) * 100);
+                let rawR = ws.data.weights.raw_roads !== undefined ? ws.data.weights.raw_roads : Math.round((ws.data.weights.roads ?? 0.3) * 100);
+                let rawA = ws.data.weights.raw_area !== undefined ? ws.data.weights.raw_area : Math.round((ws.data.weights.area ?? 0.2) * 100);
 
                 let slStock = document.getElementById('sl-stock');
+                let numStock = document.getElementById('num-stock');
                 let slRoads = document.getElementById('sl-roads');
+                let numRoads = document.getElementById('num-roads');
                 let slArea = document.getElementById('sl-area');
-                if (slStock) slStock.value = Math.round(wStock * 100);
-                if (slRoads) slRoads.value = Math.round(wRoads * 100);
-                if (slArea) slArea.value = Math.round(wArea * 100);
+                let numArea = document.getElementById('num-area');
 
-                let twStock = document.getElementById('txt-w-stock');
-                let twRoads = document.getElementById('txt-w-roads');
-                let twArea = document.getElementById('txt-w-area');
+                if (slStock) slStock.value = rawS;
+                if (numStock) numStock.value = rawS;
+                if (slRoads) slRoads.value = rawR;
+                if (numRoads) numRoads.value = rawR;
+                if (slArea) slArea.value = rawA;
+                if (numArea) numArea.value = rawA;
+
+                let sum = rawS + rawR + rawA;
+                if (sum > 0) {
+                    wStock = rawS / sum;
+                    wRoads = rawR / sum;
+                    wArea = rawA / sum;
+                } else {
+                    wStock = 1 / 3;
+                    wRoads = 1 / 3;
+                    wArea = 1 / 3;
+                }
+
                 let twSum = document.getElementById('txt-sum-w');
-                if (twStock) twStock.innerText = Math.round(wStock * 100) + '%';
-                if (twRoads) twRoads.innerText = Math.round(wRoads * 100) + '%';
-                if (twArea) twArea.innerText = Math.round(wArea * 100) + '%';
-                if (twSum) twSum.innerText = Math.round((wStock + wRoads + wArea) * 100) + '%';
+                if (twSum) {
+                    if (Math.round(sum) === 100) {
+                        twSum.innerHTML = '<span style="color:var(--forest);">100%</span>';
+                    } else {
+                        twSum.innerHTML = `<span style="color:#B45309;" title="Сумма ${Math.round(sum)}%: веса автоматически нормируются">${Math.round(sum)}% (норм.)</span>`;
+                    }
+                }
             }
         }
 
@@ -1536,7 +1649,6 @@
         currentWsName = newName.trim() || `Сценарий #${newId.substring(0, 6)}`;
 
         resetDistrictsToDefaults();
-        resetEnterprisesToMonograph();
         resetToGost();
 
         const badge = document.getElementById('ws-id-badge');

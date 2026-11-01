@@ -31,7 +31,7 @@ def test_serve_html_index(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "Лес-Оптима" in response.text
+    assert "ForestOptima" in response.text or "ЛесОптима" in response.text
 
 
 def test_workspace_lifecycle(client):
@@ -43,7 +43,7 @@ def test_workspace_lifecycle(client):
     data_get = resp_get.json()
     assert data_get["uid"] == uid
     assert "districts" in data_get["data"]
-    assert len(data_get["data"]["districts"]) == 6
+    assert len(data_get["data"]["districts"]) == 23
 
     # 2. Обновление / сохранение
     new_data = {
